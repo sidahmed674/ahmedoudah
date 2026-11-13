@@ -1,4 +1,4 @@
-# 🦷 Dr. Nawres Ben Salah — Dental Clinic Platform
+# 🦷 Dr. Ahmed Waddah — Dental Clinic Platform
 
 [![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://reactjs.org/)
@@ -6,7 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 
-A premium, high-fidelity web platform for **Cabinet Dr. Nawres Ben Salah**, a modern dental clinic located in La Marsa, Tunis. Designed with a focus on luxury aesthetics, smooth animations, and seamless user experience.
+A premium, high-fidelity web platform for **Cabinet Dr. Ahmed Waddah**, a modern dental clinic. Designed with a focus on luxury aesthetics, smooth animations, and a seamless user experience.
 
 ---
 
@@ -18,7 +18,7 @@ A premium, high-fidelity web platform for **Cabinet Dr. Nawres Ben Salah**, a mo
 - **📱 Ultra-Responsive**: Optimized for all devices, including a unique "card-stacking" animation for mobile services and glassmorphism UI.
 - **⚡ High Performance**: Built with Vite 8 and React 19 for near-instant load times and efficient HMR.
 - **🎨 Motion Experience**: Smooth reveals and micro-interactions powered by Framer Motion.
-- **📍 Integrated Map & Schedule**: Live Google Maps integration and dynamic working hours display.
+- **📍 Integrated Map & Schedule**: Google Maps integration and dynamic working hours display.
 
 ---
 
@@ -38,24 +38,32 @@ A premium, high-fidelity web platform for **Cabinet Dr. Nawres Ben Salah**, a mo
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (Latest LTS recommended)
 - npm or yarn
 
 ### Installation
+
 1. Clone the repository:
+
    ```bash
-   git clone https://github.com/Escgot/nbs-dental.git
+   git clone https://github.com/Escgot/ahmedoudah.git
    ```
+
 2. Install dependencies:
+
    ```bash
    npm install
    ```
+
 3. Start the development server:
+
    ```bash
    npm run dev
    ```
 
 ### Building for Production
+
 ```bash
 npm run build
 ```
@@ -78,18 +86,22 @@ src/
 
 ## 👨‍⚕️ About the Clinic
 
-**Dr. Nawres Ben Salah** is a specialist in restorative and aesthetic dentistry. The clinic offers high-end services including:
+**Dr. Ahmed Waddah** is a dental professional dedicated to providing high-quality dental care, with a focus on patient comfort, modern techniques, and aesthetic excellence.
+
+The clinic's services may include:
+
 - 🦷 Preventive Care & Scaling
 - 💎 Dental Veneers (Ceramic)
 - 🦷 Invisible Aligners
 - ✨ Professional Teeth Whitening
 - 🏗️ Dental Implants & Ceramic Crowns
 
-**Location**: Immeuble Kmar Médical Center, La Marsa, Tunis.
-
 ---
 
 ## 📄 License
 
 Private Project - All rights reserved.
-"# ahmedoudah" 
+
+---
+
+**Project Repository:** `ahmedoudah`
