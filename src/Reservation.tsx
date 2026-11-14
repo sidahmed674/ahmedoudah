@@ -7,7 +7,7 @@ import {
 import { translations } from './translations';
 import type { Language } from './translations';
 import { CLINIC, SERVICE_IDS, TIME_SLOTS, isWorkDay, toYMD, validDZPhone, normalizeDZPhone } from './lib/clinic';
-import { getBookedTimes, createBooking } from './lib/supabase';
+import { getBookedTimes, createBooking } from './lib/api';
 
 const CARE_TYPES = [...SERVICE_IDS];
 
@@ -32,37 +32,27 @@ export default function Reservation({ lang }: { lang: Language }) {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
 
-  // Calendar state
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
 
   const daysInMonth = useMemo(() => getDaysInMonth(viewYear, viewMonth), [viewYear, viewMonth]);
   const firstDay = useMemo(() => getFirstDayOfMonth(viewYear, viewMonth), [viewYear, viewMonth]);
-
-  // Previous month days for leading blanks
   const prevMonthDays = useMemo(() => getDaysInMonth(viewYear, viewMonth - 1), [viewYear, viewMonth]);
 
   const calendarDays = useMemo(() => {
     const days: { day: number; inMonth: boolean; date: Date }[] = [];
-
-    // Leading days from previous month
     for (let i = firstDay - 1; i >= 0; i--) {
       const d = prevMonthDays - i;
       days.push({ day: d, inMonth: false, date: new Date(viewYear, viewMonth - 1, d) });
     }
-
-    // Current month
     for (let i = 1; i <= daysInMonth; i++) {
       days.push({ day: i, inMonth: true, date: new Date(viewYear, viewMonth, i) });
     }
-
-    // Trailing days
     const remaining = 42 - days.length;
     for (let i = 1; i <= remaining; i++) {
       days.push({ day: i, inMonth: false, date: new Date(viewYear, viewMonth + 1, i) });
     }
-
     return days;
   }, [viewYear, viewMonth, daysInMonth, firstDay, prevMonthDays]);
 
@@ -122,9 +112,8 @@ export default function Reservation({ lang }: { lang: Language }) {
     setTimeout(() => setStep(3), 400);
   }
 
-  // تحميل الأوقات المحجوزة لليوم المختار (حجز حقيقي — يمنع المزدوج)
   useEffect(() => {
-    if (!selectedDate) { setBooked([]); return; }
+    if (!selectedDate) return;
     let live = true;
     getBookedTimes(toYMD(selectedDate)).then((times) => {
       if (live) setBooked(times);
@@ -152,6 +141,7 @@ export default function Reservation({ lang }: { lang: Language }) {
       date: toYMD(selectedDate),
       time: selectedTime,
       notes: formData.email.trim() || undefined,
+      lang,
     });
     setSubmitting(false);
     if (!res.ok) {
@@ -171,6 +161,7 @@ export default function Reservation({ lang }: { lang: Language }) {
     setSelectedCare(null);
     setSelectedDate(null);
     setSelectedTime(null);
+    setBooked([]);
     setFormData({ name: '', phone: '', email: '' });
     setSubmitted(false);
   }
@@ -184,7 +175,6 @@ export default function Reservation({ lang }: { lang: Language }) {
   return (
     <section className="reservation-section">
       <div className="reservation-box">
-        {/* Left Column */}
         <div className="res-left">
           <span className="res-overline">{t.overline}</span>
           <h2 className="res-title">{t.title}</h2>
@@ -203,7 +193,6 @@ export default function Reservation({ lang }: { lang: Language }) {
           <p className="res-paynote">{t.payNote}</p>
         </div>
 
-        {/* Right Column */}
         <div className="res-right">
           <div className="stepper-new">
             <div className={`step-new ${step >= 1 ? 'active' : ''}`}>
@@ -222,7 +211,6 @@ export default function Reservation({ lang }: { lang: Language }) {
 
           <div className="res-body">
             <AnimatePresence mode="wait">
-              {/* Step 1 */}
               {step === 1 && (
                 <motion.div key="step1" variants={stepVariants} initial="enter" animate="center" exit="exit">
                   <h3 className="res-question">{t.careQuestion}</h3>
@@ -233,7 +221,7 @@ export default function Reservation({ lang }: { lang: Language }) {
                         className={`care-option-pill ${selectedCare === care ? 'selected' : ''}`}
                         onClick={() => handleSelectCare(care)}
                       >
-                        <span>{(t.careTypes as any)[care] || care}</span>
+                        <span>{(t.careTypes as Record<string, string>)[care] || care}</span>
                         <div className="care-option-icon">
                           {selectedCare === care ? <Check size={14} /> : <ArrowUpRight size={14} />}
                         </div>
@@ -243,7 +231,6 @@ export default function Reservation({ lang }: { lang: Language }) {
                 </motion.div>
               )}
 
-              {/* Step 2 */}
               {step === 2 && (
                 <motion.div key="step2" variants={stepVariants} initial="enter" animate="center" exit="exit">
                   <div className="step2-content-new">
@@ -327,7 +314,6 @@ export default function Reservation({ lang }: { lang: Language }) {
                 </motion.div>
               )}
 
-              {/* Step 3 */}
               {step === 3 && !submitted && (
                 <motion.div key="step3" variants={stepVariants} initial="enter" animate="center" exit="exit" className="step3-wrapper">
                   <h3 className="res-question">{t.confirmTitle}</h3>
@@ -335,7 +321,7 @@ export default function Reservation({ lang }: { lang: Language }) {
                   <div className="summary-card-new">
                     <div className="summary-item-new">
                       <span className="summary-label-new">{t.summaryCare}</span>
-                      <span className="summary-value-new">{(t.careTypes as any)[selectedCare ?? ''] || selectedCare}</span>
+                      <span className="summary-value-new">{(t.careTypes as Record<string, string>)[selectedCare ?? ''] || selectedCare}</span>
                     </div>
                     <div className="summary-item-new">
                       <span className="summary-label-new">{t.summaryDate}</span>
@@ -377,7 +363,7 @@ export default function Reservation({ lang }: { lang: Language }) {
                     <div className="form-group-new">
                       <label><Mail size={16} /> {t.email}</label>
                       <input
-                        type="email"
+                        type="text"
                         placeholder={t.emailPlaceholder}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -397,7 +383,6 @@ export default function Reservation({ lang }: { lang: Language }) {
                 </motion.div>
               )}
 
-              {/* Success */}
               {step === 3 && submitted && (
                 <motion.div
                   key="success"
@@ -411,12 +396,12 @@ export default function Reservation({ lang }: { lang: Language }) {
                     <Check size={40} strokeWidth={3} />
                   </div>
                   <h3 className="res-question">{t.successTitle}</h3>
-                    <p className="success-text-new">
-                      {t.successThanks} {formData.name}. {t.successText1} <strong>{(t.careTypes as any)[selectedCare ?? ''] || selectedCare}</strong> {t.successText2}{' '}
-                      <strong>
-                        {selectedDate?.toLocaleDateString(lang === 'ar' ? 'ar-DZ' : lang === 'fr' ? 'fr-FR' : 'en-US', {
-                          weekday: 'long', day: 'numeric', month: 'long'
-                        })}
+                  <p className="success-text-new">
+                    {t.successThanks} {formData.name}. {t.successText1} <strong>{(t.careTypes as Record<string, string>)[selectedCare ?? ''] || selectedCare}</strong> {t.successText2}{' '}
+                    <strong>
+                      {selectedDate?.toLocaleDateString(lang === 'ar' ? 'ar-DZ' : lang === 'fr' ? 'fr-FR' : 'en-US', {
+                        weekday: 'long', day: 'numeric', month: 'long'
+                      })}
                     </strong>{' '}
                     {t.successText3} <strong>{selectedTime}</strong>.
                   </p>

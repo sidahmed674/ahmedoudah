@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { Phone } from "lucide-react";
+import type { TranslationBundle } from "../translations";
 import { CLINIC } from "../lib/clinic";
 
-const BottomLeftCard = ({ t }: { t: any }) => {
+const BottomLeftCard = ({ t }: { t: TranslationBundle }) => {
   return (
     <motion.div
       initial={{ x: -20, opacity: 0 }}

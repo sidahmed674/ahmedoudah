@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { ArrowUpRight, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Language } from "../translations";
+import type { Language, TranslationBundle } from "../translations";
 
 interface NavbarProps {
   lang: Language;
   toggleLang: () => void;
-  t: any;
+  t: TranslationBundle;
 }
 
 const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
@@ -44,7 +44,7 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
       transition: {
         duration: 0.8,
         staggerChildren: 0.1,
-        ease: "easeOut" as any
+        ease: "easeOut" as const
       }
     }
   };
@@ -60,7 +60,7 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
         variants={containerVariants}
         initial="hidden"
         animate={isVisible ? "visible" : { y: -100, opacity: 0 }}
-        transition={{ duration: 0.4, ease: "easeInOut" as any }}
+        transition={{ duration: 0.4, ease: "easeInOut" as const }}
         className={`fixed top-0 left-0 right-0 z-[999] flex items-center justify-center pointer-events-none ${
           isSticky ? "pt-4 px-4 md:px-6 lg:px-10" : "pt-8 md:pt-12 px-4 md:px-6 lg:px-10"
         }`}
@@ -70,7 +70,6 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
             ? "max-w-7xl bg-white/70 backdrop-blur-2xl border border-white/40 shadow-[0_20px_80px_rgba(45,76,59,0.12)] rounded-full px-2 sm:px-3 py-2" 
             : "max-w-none"
         }`}>
-          {/* Logo Section */}
           <motion.a 
             variants={itemVariants} 
             href="#accueil" 
@@ -80,10 +79,10 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
                 : "bg-white/55 backdrop-blur-xl border border-white/30 py-1.5 ps-2 pe-4 shadow-[0_18px_55px_rgba(45,76,59,0.12)]"
             }`}
           >
-            <div className={`overflow-hidden rounded-full flex items-center justify-center bg-[rgba(94,135,108,0.08)] transition-all duration-500 ${
+            <div className={`overflow-hidden rounded-full flex items-center justify-center bg-[#253F31] transition-all duration-500 ${
               isSticky ? "h-9 w-9" : "h-10 w-10"
             }`}>
-              <img src="/images/logo.svg" alt="Ouadah Clinic Logo" className="h-full w-full object-contain" />
+              <img src="/assets/aistudio/________________________1__c4aece84.png" alt="شعار الدكتور أحمد وضاح" className="h-full w-full object-cover" />
             </div>
             <span className="flex flex-col leading-none">
               <span className={`font-normal tracking-tight text-[rgba(37,63,49,0.95)] transition-all duration-500 ${
@@ -95,7 +94,6 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
             </span>
           </motion.a>
 
-          {/* Menu Items (Desktop) */}
           <motion.ul 
             variants={itemVariants} 
             className={`hidden md:flex items-center transition-all duration-500 ${
@@ -111,7 +109,6 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
             ))}
           </motion.ul>
 
-          {/* Right Actions */}
           <motion.div 
             variants={itemVariants} 
             className={`flex items-center transition-all duration-500 ${
@@ -144,7 +141,6 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
               }`}>{t.nav.rdv}</span>
             </motion.a>
 
-            {/* Mobile Menu Toggle */}
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
               className="md:hidden h-10 w-10 flex items-center justify-center rounded-full bg-[rgba(94,135,108,0.08)] text-[rgba(37,63,49,0.95)]"
@@ -155,7 +151,6 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
@@ -170,7 +165,7 @@ const Navbar = ({ lang, toggleLang, t }: NavbarProps) => {
               initial={{ x: lang === 'ar' ? '-100%' : '100%' }}
               animate={{ x: 0 }}
               exit={{ x: lang === 'ar' ? '-100%' : '100%' }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 } as any}
+              transition={{ type: "spring" as const, damping: 25, stiffness: 200 }}
               className={`fixed top-0 bottom-0 ${lang === 'ar' ? 'left-0' : 'right-0'} w-[280px] bg-white/90 backdrop-blur-2xl z-[1001] md:hidden shadow-2xl p-6 flex flex-col`}
             >
               <div className="flex items-center justify-between mb-10">

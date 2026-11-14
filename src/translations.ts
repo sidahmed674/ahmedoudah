@@ -1,4 +1,5 @@
 export type Language = 'fr' | 'en' | 'ar';
+export type TranslationBundle = (typeof translations)[Language];
 
 export const translations = {
   fr: {
@@ -18,7 +19,7 @@ export const translations = {
       overline: "CABINET DR AHMED OUADAH — SIDI BEL ABBÈS",
       titlePart1: "Votre sourire,",
       titlePart2: "notre métier",
-      description: "Implantologie, esthétique et chirurgie orale sans douleur, avec diagnostic numérique et stérilisation 100%. +10 ans d'expérience et +5000 sourires à Sidi Bel Abbès.",
+      description: "Implantologie, esthétique et chirurgie orale sans douleur, avec diagnostic numérique et stérilisation 100%. Plus de 30 ans d'expérience à Sidi Bel Abbès.",
       bookBtn: "Prendre rendez-vous",
       servicesBtn: "Nos services",
     },
@@ -52,10 +53,10 @@ export const translations = {
     },
     about: {
       overline: "À propos du Docteur",
-      expertiseTitle: "10+ ans d'expérience",
-      title: "L'Art du Sourire & l'Excellence Dentaire",
-      p1: "Chirurgien dentiste agréé à Sidi Bel Abbès, le Dr Ahmed Ouadah pratique selon des standards internationaux : esthétique, conservatrice, endodontie, orthodontie classique et transparente.",
-      p2: "Soins sans douleur, diagnostic par radiographie numérique, stérilisation 100% et suivi après chaque traitement. La clinique la mieux notée de Sidi Bel Abbès : 4.9/5 avec plus de 700 patients.",
+      expertiseTitle: "Plus de 30 ans d'expérience",
+      title: "Soins médicaux de niveau international à Sidi Bel Abbès",
+      p1: "Avec le Dr Ahmed Ouadah, chirurgien-dentiste agréé. Des soins thérapeutiques et esthétiques précis : esthétique dentaire, soins conservateurs, endodontie, orthodontie transparente et classique.",
+      p2: "Nous plaçons votre sécurité et votre confort au premier plan grâce à un diagnostic numérique précis, une stérilisation totale à 100% et des soins sans douleur suivis d'un programme de suivi périodique. Une confiance qui parle d'elle-même : la clinique la mieux notée de Sidi Bel Abbès avec 4.9 auprès de milliers de patients.",
       bookBtn: "Prendre Rendez-vous",
       features: [
         { id: "01", title: "Écoute", desc: "Un premier échange précis pour comprendre vos attentes et vos priorités." },
@@ -179,9 +180,9 @@ export const translations = {
     assistant: {
       title: "Assistant du cabinet",
       online: "En ligne",
-      subtitle: "Répond en darija et en français",
-      placeholder: "Écrivez votre question...",
-      welcome: "Salem 👋 Je suis l'assistant du cabinet Dr Ouadah. Posez-moi vos questions sur les prix, l'adresse, les horaires...",
+      subtitle: "Répond à toutes vos questions en français, darija et anglais",
+      placeholder: "Posez n'importe quelle question...",
+      welcome: "Salem 👋 Je suis l'assistant intelligent du cabinet Dr Ouadah. Posez-moi n'importe quelle question (soins, tarifs, ou tout autre sujet) !",
       chips: ["Prix implant ?", "Où êtes-vous ?", "Horaires ?", "J'ai peur 😟"]
     },
   },
@@ -202,7 +203,7 @@ export const translations = {
       overline: "DR AHMED OUADAH CLINIC — SIDI BEL ABBES",
       titlePart1: "Your smile,",
       titlePart2: "our craft",
-      description: "Painless implantology, aesthetics and oral surgery with digital diagnosis and 100% sterilization. 10+ years of experience and 5000+ smiles in Sidi Bel Abbes.",
+      description: "Painless implantology, aesthetics and oral surgery with digital diagnosis and 100% sterilization. Over 30 years of experience in Sidi Bel Abbes.",
       bookBtn: "Book an appointment",
       servicesBtn: "Our services",
     },
@@ -236,10 +237,10 @@ export const translations = {
     },
     about: {
       overline: "About the Doctor",
-      expertiseTitle: "10+ years experience",
-      title: "The Art of the Smile & Dental Excellence",
-      p1: "A licensed dental surgeon in Sidi Bel Abbes, Dr Ahmed Ouadah practices to international standards: aesthetics, conservative care, endodontics, classic and clear orthodontics.",
-      p2: "Painless care, digital X-ray diagnosis, 100% sterilization and follow-up after every treatment. The top-rated clinic in Sidi Bel Abbes: 4.9/5 from 700+ patients.",
+      expertiseTitle: "Over 30 years of experience",
+      title: "World-class dental care in Sidi Bel Abbes",
+      p1: "With Dr Ahmed Ouadah, licensed dental surgeon. Precise therapeutic and cosmetic services including aesthetic dentistry, conservative care, root canal therapy, and clear & classic orthodontics.",
+      p2: "We put your safety and comfort first through accurate digital diagnostics, 100% sterilization, and painless treatment followed by regular follow-up care. Trust that speaks for itself: the top-rated clinic in Sidi Bel Abbes with 4.9 across thousands of patients.",
       bookBtn: "Book an Appointment",
       features: [
         { id: "01", title: "Listening", desc: "A precise initial exchange to understand your expectations and priorities." },
@@ -363,9 +364,9 @@ export const translations = {
     assistant: {
       title: "Clinic assistant",
       online: "Online",
-      subtitle: "Answers in Darija and French",
-      placeholder: "Type your question...",
-      welcome: "Salem 👋 I am the assistant of Dr Ouadah's clinic. Ask me about prices, address, working hours...",
+      subtitle: "Answers any question in Arabic, French & English",
+      placeholder: "Ask anything...",
+      welcome: "Salem 👋 I am the smart assistant of Dr Ouadah's clinic. Ask me any question — dental care, clinic info, or any topic!",
       chips: ["Implant price?", "Where are you?", "Hours?", "I'm scared 😟"]
     },
   },
@@ -384,9 +385,9 @@ export const translations = {
     },
     hero: {
       overline: "عيادة الدكتور أحمد وضاح — سيدي بلعباس",
-      titlePart1: "ابتسامتك،",
-      titlePart2: "شغلنا الشاغل",
-      description: "زراعة وتجميل وجراحة الفم بدون ألم، بتشخيص رقمي وتعقيم 100%. +10 سنوات خبرة و+5000 ابتسامة في سيدي بلعباس.",
+      titlePart1: "صحة أسنانكم",
+      titlePart2: "مهمتنا",
+      description: "زراعة وتجميل وجراحة الفم بدون ألم، بتشخيص رقمي وتعقيم 100%. خبرة تفوق 30 سنة.",
       bookBtn: "احجز موعدك",
       servicesBtn: "خدماتنا",
     },
@@ -420,10 +421,10 @@ export const translations = {
     },
     about: {
       overline: "عن الطبيب",
-      expertiseTitle: "+10 سنوات خبرة",
-      title: "فن الابتسامة والتميز في طب الأسنان",
-      p1: "طبيب جراح أسنان معتمد في سيدي بلعباس، يلتزم الدكتور أحمد وضاح بمعايير عالمية: تجميلي، تحفظي، جذور، تقويم تقليدي وشفاف.",
-      p2: "علاج بدون ألم، تشخيص بالأشعة الرقمية، تعقيم 100% ومتابعة بعد كل علاج. العيادة الأعلى تقييما في سيدي بلعباس: 4.9 من 700+ مريض.",
+      expertiseTitle: "خبرة تفوق 30 سنة",
+      title: "رعاية طبية بمستويات عالمية في سيدي بلعباس",
+      p1: "مع الدكتور أحمد وضاح، جراح الأسنان المعتمد. خدمات علاجية وتجميلية دقيقة تشمل: تجميل الأسنان، العلاج التحفظي، علاج الجذور، والتقويم الشفاف والتقليدي.",
+      p2: "نضع سلامتك وراحتك في أولوياتنا عبر تشخيص رقمي دقيق، تعقيم تام 100%، وعلاج بدون ألم يتبعه برنامج متابعة دورية. ثقة تتحدث عن نفسها: العيادة الأعلى تقييماً في سيدي بلعباس بـ 4.9 من أصل آلاف المرضى.",
       bookBtn: "حجز موعد",
       features: [
         { id: "01", title: "الإصغاء", desc: "تبادل أولي دقيق لفهم تطلعاتكم وأولوياتكم." },
@@ -545,11 +546,11 @@ export const translations = {
       empty: "القائمة فارغة حاليا."
     },
     assistant: {
-      title: "مساعد العيادة",
+      title: "مساعد العيادة الذكي",
       online: "متصل",
-      subtitle: "يجاوب بالدارجة والفرنسية",
-      placeholder: "اكتب سؤالك...",
-      welcome: "سلام عليكم 👋 أنا مساعد عيادة الدكتور وضاح. سقسيني على الأسعار، العنوان، أوقات العمل...",
+      subtitle: "يجيب على أي سؤال بالدارجة والعربية والفرنسية",
+      placeholder: "اسأل أي سؤال في بالك...",
+      welcome: "سلام عليكم 👋 أنا المساعد الذكي لعيادة الدكتور وضاح. اسألني أي سؤال يخطر في بالك — عن الأسنان، العيادة، أو أي موضوع عام!",
       chips: ["شحال الزراعة؟", "وين العيادة؟", "وقت الخدمة؟", "أنا خايف 😟"]
     },
   }

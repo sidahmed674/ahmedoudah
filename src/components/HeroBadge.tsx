@@ -1,7 +1,8 @@
 import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import type { TranslationBundle } from "../translations";
 
-const HeroBadge = ({ t }: { t: any }) => {
+const HeroBadge = ({ t }: { t: TranslationBundle }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BellRing, Check, Clock } from 'lucide-react';
-import type { Language } from './translations';
+import type { Language, TranslationBundle } from './translations';
 import { validDZPhone, normalizeDZPhone } from './lib/clinic';
-import { joinWaiting } from './lib/supabase';
+import { joinWaiting } from './lib/api';
 
 interface Props {
   lang: Language;
-  t: any;
+  t: TranslationBundle;
 }
 
-export default function WaitingList({ t }: Props) {
+export default function WaitingList({ lang, t }: Props) {
   const w = t.waiting;
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -28,7 +28,7 @@ export default function WaitingList({ t }: Props) {
       return;
     }
     setSending(true);
-    const ok = await joinWaiting({ full_name: name.trim(), phone: p, period, service_code: 'other' });
+    const ok = await joinWaiting({ full_name: name.trim(), phone: p, period, lang });
     setSending(false);
     if (!ok) {
       setError(w.badPhone);
@@ -71,7 +71,7 @@ export default function WaitingList({ t }: Props) {
               </div>
               <div>
                 <label className="text-xs font-bold">{w.period}</label>
-                <select value={period} onChange={(e) => setPeriod(e.target.value as any)}
+                <select value={period} onChange={(e) => setPeriod(e.target.value as 'any' | 'morning' | 'evening')}
                   className="mt-1 w-full rounded-2xl border border-black/10 bg-[#f8f9f8] px-4 py-3 text-sm outline-none focus:border-[rgba(94,135,108,0.6)]">
                   <option value="any">{w.any}</option>
                   <option value="morning">{w.morning}</option>

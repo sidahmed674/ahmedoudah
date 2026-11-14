@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import type { TranslationBundle } from "../translations";
 
-const BottomRightCorner = ({ t }: { t: any }) => {
+const BottomRightCorner = ({ t }: { t: TranslationBundle }) => {
   return (
     <motion.div
       initial={{ y: 20, opacity: 0 }}
@@ -34,7 +35,7 @@ const BottomRightCorner = ({ t }: { t: any }) => {
           <Star className="w-4 h-4 md:w-5 md:h-5 text-[rgba(94,135,108,0.95)]" fill="currentColor" />
         </motion.div>
         <div className="flex flex-col">
-          <span className="text-sm md:text-[20px] font-normal text-[rgba(37,63,49,0.95)] leading-tight">5000+ {t.stats.patients}</span>
+          <span className="text-sm md:text-[20px] font-normal text-[rgba(37,63,49,0.95)] leading-tight">{t.about.expertiseTitle}</span>
           <div className="flex items-center gap-1 text-[10px] md:text-[15px] text-[rgba(37,63,49,0.58)] transition-colors group-hover:text-[rgba(37,63,49,0.85)]">
             <span className="font-normal">4.9 {t.stats.reviews}</span>
           </div>

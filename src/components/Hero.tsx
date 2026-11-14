@@ -7,7 +7,7 @@ import WaitingList from "../WaitingList";
 import { ArrowUp, ArrowUpRight, Baby, Calendar, Clock, Crown, Layers, MapPin, Maximize, MessageCircle, Moon, Phone, Scissors, ShieldCheck, Sparkles, Smile, Star, Sun, Syringe } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import type { Language } from "../translations";
+import type { Language, TranslationBundle } from "../translations";
 import { CLINIC } from "../lib/clinic";
 import "../Reservation.css";
 
@@ -16,10 +16,13 @@ const SERVICE_ICONS = [ShieldCheck, Layers, Sparkles, Maximize, Crown, Sun, Syri
 interface HeroProps {
   lang: Language;
   toggleLang: () => void;
-  t: any;
+  t: TranslationBundle;
 }
 
-const ServiceCardMobile = ({ service, index, total }: { service: any, index: number, total: number }) => {
+type ServiceItem = TranslationBundle["services"]["items"][number];
+type TestimonialItem = TranslationBundle["testimonials"]["items"][number];
+
+const ServiceCardMobile = ({ service, index, total }: { service: ServiceItem, index: number, total: number }) => {
   const Icon = SERVICE_ICONS[index] || Star;
 
   return (
@@ -43,7 +46,6 @@ const ServiceCardMobile = ({ service, index, total }: { service: any, index: num
         <h3 className="text-3xl font-normal text-[rgba(37,63,49,0.96)] tracking-tight">{service.title}</h3>
         <p className="mt-5 text-base leading-relaxed text-[rgba(37,63,49,0.58)]">{service.desc}</p>
 
-        {/* Subtle index indicator */}
         <div className="absolute top-8 right-8 flex items-center gap-2">
           <span className="text-[10px] font-bold text-[rgba(94,135,108,0.4)] tracking-widest uppercase">
             {index + 1}
@@ -116,7 +118,6 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
         </div>
       </section>
 
-      {/* Services Section */}
       <section id="services" className="px-4 sm:px-6 md:px-6 py-20 md:py-32">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -132,9 +133,8 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
             </div>
             <p className="max-w-md text-[rgba(37,63,49,0.6)] leading-relaxed">{t.services.description}</p>
           </motion.div>
-          {/* Desktop Grid Layout */}
           <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {t.services.items.map((service: any, index: number) => {
+            {t.services.items.map((service: ServiceItem, index: number) => {
               const Icon = SERVICE_ICONS[index] || Star;
               return (
                 <motion.article
@@ -153,9 +153,8 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
             })}
           </div>
 
-          {/* Mobile Stacking Layout */}
           <div className="md:hidden relative flex flex-col pt-10 pb-[30vh]">
-            {t.services.items.map((service: any, index: number) => (
+            {t.services.items.map((service: ServiceItem, index: number) => (
               <ServiceCardMobile
                 key={service.title}
                 service={service}
@@ -167,22 +166,20 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
         </div>
       </section>
 
-      {/* About Section */}
       <section id="propos" className="px-4 sm:px-6 md:px-6 pb-20 md:pb-32">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-6 items-stretch">
           <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative min-h-[350px] md:min-h-[600px] overflow-hidden rounded-[2rem] md:rounded-[2.5rem] bg-[#253F31] shadow-xl group">
             <img src="/images/hero.jpg" alt="Dental care" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-center opacity-25 transition-transform duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 p-8 text-center text-white">
-              <div className="h-24 w-24 md:h-28 md:w-28 overflow-hidden rounded-full border-2 border-[#D3C49D] bg-white/10 p-4">
-                <img src="/images/logo.svg" alt="Ouadah Clinic" className="h-full w-full object-contain" />
+              <div className="h-24 w-24 md:h-28 md:w-28 overflow-hidden rounded-full border-2 border-[#D3C49D] bg-[#253F31] shadow-lg">
+                <img src="/assets/aistudio/________________________1__c4aece84.png" alt="شعار الدكتور أحمد وضاح" className="h-full w-full object-cover" />
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-medium tracking-tight">{t.nav.doctorName}</div>
                 <div className="mt-1 text-sm text-white/70">{t.nav.dentist}</div>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-bold">
-                <span className="rounded-full bg-white/10 border border-white/15 px-4 py-2">+10 ans</span>
-                <span className="rounded-full bg-white/10 border border-white/15 px-4 py-2">5000+ sourires</span>
+                <span className="rounded-full bg-white/10 border border-white/15 px-4 py-2">{t.about.expertiseTitle}</span>
                 <span className="rounded-full bg-[#D3C49D] text-[#253F31] px-4 py-2">★ 4.9</span>
               </div>
             </div>
@@ -201,12 +198,10 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
                 <p className="text-[rgba(37,63,49,0.65)] leading-relaxed text-base md:text-lg">{t.about.p2}</p>
               </div>
             </div>
-
           </motion.div>
         </div>
       </section>
 
-      {/* Reservation Section */}
       <motion.div
         id="reservation"
         initial={{ opacity: 0, scale: 0.98 }}
@@ -220,7 +215,6 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
         </div>
       </motion.div>
 
-      {/* Waiting list Section */}
       <motion.div
         id="attente"
         initial={{ opacity: 0, scale: 0.98 }}
@@ -234,7 +228,6 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
         </div>
       </motion.div>
 
-      {/* Testimonials Section */}
       <section id="avis" className="px-4 sm:px-6 md:px-6 pb-20 md:pb-32">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -260,7 +253,7 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
             </motion.a>
           </motion.div>
           <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-x-visible pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-            {t.testimonials.items.map((item: any, index: number) => (
+            {t.testimonials.items.map((item: TestimonialItem, index: number) => (
               <motion.article
                 key={item.name}
                 initial={{ opacity: 0, y: 22 }}
@@ -281,7 +274,6 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer id="contact" className="px-2 sm:px-4 md:px-6 pb-2 sm:pb-3 md:pb-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -291,11 +283,10 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
           className="max-w-7xl mx-auto overflow-hidden rounded-[2rem] md:rounded-[2.5rem] bg-white/58 backdrop-blur-2xl border border-white/45 shadow-[0_24px_90px_rgba(45,76,59,0.1)] text-[rgba(37,63,49,0.72)]"
         >
           <div className="grid gap-8 md:grid-cols-[1.2fr_0.7fr_1.6fr] p-6 md:p-8 lg:p-10">
-            {/* Column 1: Logo, Description, Contact, Socials */}
             <div className="flex flex-col">
               <a href="#accueil" className="inline-flex items-center gap-3 rounded-full bg-white/60 border border-white/40 py-1.5 pl-2 pr-5 backdrop-blur-xl w-fit">
-                <div className="h-10 w-10 overflow-hidden rounded-full flex items-center justify-center bg-[rgba(94,135,108,0.08)]">
-                  <img src="/images/logo.svg" alt="Ouadah Clinic Logo" className="h-full w-full object-contain" />
+                <div className="h-10 w-10 overflow-hidden rounded-full flex items-center justify-center bg-[#253F31]">
+                  <img src="/assets/aistudio/________________________1__c4aece84.png" alt="شعار الدكتور أحمد وضاح" className="h-full w-full object-cover" />
                 </div>
                 <span className="text-base font-normal text-[rgba(37,63,49,0.95)]">{t.nav.doctorName}</span>
               </a>
@@ -311,11 +302,9 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
                     <span className="whitespace-pre-line">{t.footer.address}</span>
                   </a>
                 </div>
-
               </div>
             </div>
 
-            {/* Column 2: Liens & Socials */}
             <div className="flex flex-col">
               <div className="grid grid-cols-2 md:grid-cols-1 gap-8 md:gap-0">
                 <div>
@@ -344,7 +333,6 @@ const Hero = ({ lang, toggleLang, t }: HeroProps) => {
               </div>
             </div>
 
-            {/* Column 3: Horaires & Map */}
             <div className="flex flex-col gap-8">
               <div>
                 <h3 className="text-sm font-normal uppercase tracking-[0.22em] text-[rgba(94,135,108,0.92)] flex items-center gap-2">
