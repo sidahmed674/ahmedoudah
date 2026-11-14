@@ -1,5 +1,5 @@
-import type { ServerlessRequest, ServerlessResponse } from './_core';
-import { callOpenRouter, readJsonBody, sendJson } from './_core';
+import type { ServerlessRequest, ServerlessResponse } from './_core.js';
+import { callOpenRouter, readJsonBody, sendJson } from './_core.js';
 
 export default async function handler(req: ServerlessRequest, res: ServerlessResponse) {
   if (req.method !== 'POST') {

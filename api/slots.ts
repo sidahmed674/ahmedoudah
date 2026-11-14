@@ -1,5 +1,5 @@
-import type { ServerlessRequest, ServerlessResponse } from './_core';
-import { bookedSlots, sendJson } from './_core';
+import type { ServerlessRequest, ServerlessResponse } from './_core.js';
+import { bookedSlots, sendJson } from './_core.js';
 
 export default function handler(req: ServerlessRequest, res: ServerlessResponse) {
   if (req.method !== 'GET') {

@@ -19,7 +19,7 @@ export async function createBooking(input: {
   time: string;
   notes?: string;
   lang?: Language;
-}): Promise<{ ok: boolean; reason?: 'taken' | 'error'; refId?: string }> {
+}): Promise<{ ok: boolean; reason?: 'taken' | 'error'; refId?: string; detail?: string }> {
   try {
     const res = await fetch('/api/bookings', {
       method: 'POST',
@@ -30,13 +30,18 @@ export async function createBooking(input: {
       ok?: boolean;
       reason?: 'taken' | 'error';
       refId?: string;
+      code?: string;
     };
     if (!res.ok || !data.ok) {
-      return { ok: false, reason: data.reason === 'taken' ? 'taken' : 'error' };
+      if (data.reason === 'taken') {
+        return { ok: false, reason: 'taken' };
+      }
+      const detail = data.code || `HTTP_${res.status}`;
+      return { ok: false, reason: 'error', detail };
     }
     return { ok: true, refId: data.refId };
   } catch {
-    return { ok: false, reason: 'error' };
+    return { ok: false, reason: 'error', detail: 'NETWORK_ERROR' };
   }
 }
 

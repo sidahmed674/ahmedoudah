@@ -1,5 +1,5 @@
-import type { ServerlessRequest, ServerlessResponse } from './_core';
-import { sendJson } from './_core';
+import type { ServerlessRequest, ServerlessResponse } from './_core.js';
+import { sendJson } from './_core.js';
 
 export default function handler(req: ServerlessRequest, res: ServerlessResponse) {
   if (req.method !== 'GET') {

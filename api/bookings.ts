@@ -1,4 +1,4 @@
-import type { ServerlessRequest, ServerlessResponse } from './_core';
+import type { ServerlessRequest, ServerlessResponse } from './_core.js';
 import {
   SERVICE_LABELS,
   bookedSlots,
@@ -11,11 +11,11 @@ import {
   readJsonBody,
   resolveLogoBuffer,
   sendJson,
-} from './_core';
+} from './_core.js';
 
 export default async function handler(req: ServerlessRequest, res: ServerlessResponse) {
   if (req.method !== 'POST') {
-    return sendJson(res, 405, { ok: false, reason: 'error' });
+    return sendJson(res, 405, { ok: false, reason: 'error', code: 'METHOD_NOT_ALLOWED' });
   }
 
   const body = await readJsonBody(req);
@@ -28,10 +28,10 @@ export default async function handler(req: ServerlessRequest, res: ServerlessRes
   const lang = typeof body.lang === 'string' ? body.lang.trim() : 'ar';
 
   if (!name || name.length > 100 || !isValidDZPhone(rawPhone) || !SERVICE_LABELS[service]) {
-    return sendJson(res, 400, { ok: false, reason: 'error' });
+    return sendJson(res, 400, { ok: false, reason: 'error', code: 'INVALID_INPUT' });
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) {
-    return sendJson(res, 400, { ok: false, reason: 'error' });
+    return sendJson(res, 400, { ok: false, reason: 'error', code: 'INVALID_DATETIME' });
   }
 
   pruneOldSlots();
@@ -46,7 +46,7 @@ export default async function handler(req: ServerlessRequest, res: ServerlessRes
 
   if (!process.env.DISCORD_WEBHOOK_URL?.trim()) {
     console.error('[bookings] DISCORD_WEBHOOK_URL is missing in environment variables');
-    return sendJson(res, 503, { ok: false, reason: 'error' });
+    return sendJson(res, 503, { ok: false, reason: 'error', code: 'MISSING_DISCORD_WEBHOOK' });
   }
 
   const baseUrl = getRequestBaseUrl(req);
@@ -66,9 +66,13 @@ export default async function handler(req: ServerlessRequest, res: ServerlessRes
     Boolean(logoBuf)
   );
 
-  const delivered = await deliverDiscordDirect(payload, baseUrl);
-  if (!delivered) {
-    return sendJson(res, 502, { ok: false, reason: 'error' });
+  const delivery = await deliverDiscordDirect(payload, baseUrl);
+  if (!delivery.ok) {
+    return sendJson(res, 502, {
+      ok: false,
+      reason: 'error',
+      code: `DISCORD_HTTP_${delivery.status ?? 'ERR'}`,
+    });
   }
 
   daySet.add(time);

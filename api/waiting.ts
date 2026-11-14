@@ -1,4 +1,4 @@
-import type { ServerlessRequest, ServerlessResponse } from './_core';
+import type { ServerlessRequest, ServerlessResponse } from './_core.js';
 import {
   PERIOD_LABELS,
   buildWaitingDiscordPayload,
@@ -9,11 +9,11 @@ import {
   readJsonBody,
   resolveLogoBuffer,
   sendJson,
-} from './_core';
+} from './_core.js';
 
 export default async function handler(req: ServerlessRequest, res: ServerlessResponse) {
   if (req.method !== 'POST') {
-    return sendJson(res, 405, { ok: false });
+    return sendJson(res, 405, { ok: false, code: 'METHOD_NOT_ALLOWED' });
   }
 
   const body = await readJsonBody(req);
@@ -23,12 +23,12 @@ export default async function handler(req: ServerlessRequest, res: ServerlessRes
   const lang = typeof body.lang === 'string' ? body.lang.trim() : 'ar';
 
   if (!full_name || full_name.length > 100 || !isValidDZPhone(rawPhone)) {
-    return sendJson(res, 400, { ok: false });
+    return sendJson(res, 400, { ok: false, code: 'INVALID_INPUT' });
   }
 
   if (!process.env.DISCORD_WEBHOOK_URL?.trim()) {
     console.error('[waiting] DISCORD_WEBHOOK_URL is missing in environment variables');
-    return sendJson(res, 503, { ok: false });
+    return sendJson(res, 503, { ok: false, code: 'MISSING_DISCORD_WEBHOOK' });
   }
 
   const baseUrl = getRequestBaseUrl(req);
@@ -45,9 +45,12 @@ export default async function handler(req: ServerlessRequest, res: ServerlessRes
     Boolean(logoBuf)
   );
 
-  const delivered = await deliverDiscordDirect(payload, baseUrl);
-  if (!delivered) {
-    return sendJson(res, 502, { ok: false });
+  const delivery = await deliverDiscordDirect(payload, baseUrl);
+  if (!delivery.ok) {
+    return sendJson(res, 502, {
+      ok: false,
+      code: `DISCORD_HTTP_${delivery.status ?? 'ERR'}`,
+    });
   }
 
   return sendJson(res, 200, { ok: true, refId });

@@ -4,8 +4,7 @@
   "outputDirectory": "dist",
   "functions": {
     "api/*.ts": {
-      "includeFiles": "public/assets/aistudio/**",
-      "maxDuration": 30
+      "includeFiles": "public/assets/aistudio/**"
     }
   }
 }

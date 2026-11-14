@@ -236,11 +236,11 @@ export function buildWaitingDiscordPayload(
 export async function sendToDiscordOnce(
   payload: Record<string, unknown>,
   baseUrl?: string
-): Promise<{ ok: boolean; retryAfterMs?: number; fatal?: boolean }> {
+): Promise<{ ok: boolean; retryAfterMs?: number; fatal?: boolean; status?: number }> {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL?.trim();
   if (!webhookUrl) {
     console.warn('[discord] DISCORD_WEBHOOK_URL is not configured');
-    return { ok: false, fatal: true };
+    return { ok: false, fatal: true, status: 0 };
   }
 
   const logoBuf = await resolveLogoBuffer(baseUrl);
@@ -255,6 +255,16 @@ export async function sendToDiscordOnce(
       body: form,
       signal: AbortSignal.timeout(10_000),
     });
+
+    if (res.status >= 400 && res.status < 500 && res.status !== 429) {
+      const strippedJson = JSON.stringify(payload).replace(/"icon_url":"attachment:\/\/doctor-logo\.png",?/g, '').replace(/"thumbnail":\{"url":"attachment:\/\/doctor-logo\.png"\},?/g, '');
+      res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: strippedJson,
+        signal: AbortSignal.timeout(10_000),
+      });
+    }
   } else {
     res = await fetch(webhookUrl, {
       method: 'POST',
@@ -275,36 +285,38 @@ export async function sendToDiscordOnce(
       const hdr = Number(res.headers.get('retry-after'));
       if (!Number.isNaN(hdr) && hdr > 0) retryAfterMs = hdr * 1000;
     }
-    return { ok: false, retryAfterMs };
+    return { ok: false, retryAfterMs, status: 429 };
   }
 
   if (res.ok) {
-    return { ok: true };
+    return { ok: true, status: res.status };
   }
 
   const errText = await res.text().catch(() => '');
   console.error(`[discord] Webhook error ${res.status}:`, errText.slice(0, 300));
-  return { ok: false, fatal: res.status >= 400 && res.status < 500 && res.status !== 429 };
+  return { ok: false, fatal: res.status >= 400 && res.status < 500 && res.status !== 429, status: res.status };
 }
 
 export async function deliverDiscordDirect(
   payload: Record<string, unknown>,
   baseUrl?: string
-): Promise<boolean> {
+): Promise<{ ok: boolean; status?: number }> {
+  let lastStatus: number | undefined;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const result = await sendToDiscordOnce(payload, baseUrl);
-      if (result.ok) return true;
-      if (result.fatal || attempt === 2) return false;
+      lastStatus = result.status;
+      if (result.ok) return { ok: true, status: result.status };
+      if (result.fatal || attempt === 2) return { ok: false, status: lastStatus };
       const waitMs = Math.min(3500, result.retryAfterMs ?? 750 * (attempt + 1));
       await new Promise((r) => setTimeout(r, waitMs));
     } catch (err) {
       console.error('[discord] Delivery exception:', err);
-      if (attempt === 2) return false;
+      if (attempt === 2) return { ok: false, status: lastStatus };
       await new Promise((r) => setTimeout(r, 750 * (attempt + 1)));
     }
   }
-  return false;
+  return { ok: false, status: lastStatus };
 }
 
 interface AiCacheEntry {

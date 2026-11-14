@@ -149,7 +149,7 @@ export default function Reservation({ lang }: { lang: Language }) {
         setFormError(t.takenError);
         getBookedTimes(toYMD(selectedDate)).then(setBooked);
       } else {
-        setFormError(t.submitError);
+        setFormError(res.detail ? `${t.submitError} (${res.detail})` : t.submitError);
       }
       return;
     }
